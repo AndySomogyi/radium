@@ -1,0 +1,15 @@
+[submodule "extern/glfw"]
+	path = extern/glfw
+	url = https://github.com/AndySomogyi/glfw.git
+[submodule "extern/magnum"]
+	path = extern/magnum
+	url = https://github.com/AndySomogyi/magnum.git
+[submodule "extern/magnum-bindings"]
+	path = extern/magnum-bindings
+	url = https://github.com/mosra/magnum-bindings.git
+[submodule "extern/corrade"]
+	path = extern/corrade
+	url = https://github.com/AndySomogyi/corrade.git
+[submodule "extern/pybind11"]
+	path = extern/pybind11
+	url = https://github.com/pybind/pybind11.git
