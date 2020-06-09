@@ -1,15 +1,14 @@
-#
-#if(DEFINED ENV{VCPKG_ROOT})
-#  message("found vcpkg, using toolchain: ${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-#  set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-#    CACHE STRING "")
-#else()
-#  message("NOT using vcpkg")
-#endif()
-
-
 # need 3.12 for FindPython support
 cmake_minimum_required (VERSION 3.12)
+
+
+if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+    CACHE STRING "")
+    message(" [INFO] VCPKG CMAKE_TOOLCHAIN_FILE = ${CMAKE_TOOLCHAIN_FILE}")
+endif()
+
+message("VCPKG CMAKE_TOOLCHAIN_FILE = ${CMAKE_TOOLCHAIN_FILE}")
 
 project(Radium)
 
@@ -73,6 +72,11 @@ message("CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}")
 
 #find_package(GLFW REQUIRED)
 
+find_package(unofficial-cairo CONFIG REQUIRED)
+
+message("cairo: ${unofficial-cairo}")
+#message("ucairo: ${unofficial::cairo}")
+#message("ucairoc: ${unofficial::cairo::cairo}")
 
 find_package(Python 3.5 COMPONENTS Development NumPy)
 
@@ -178,8 +182,6 @@ endforeach()
 add_subdirectory(extern)
 
 
-message("getting mdcore interface incude:  ${MDCORE_INCLUDE_DIR}")
-
 #add_subdirectory(include)
 #add_subdirectory(src)
 
@@ -198,7 +200,7 @@ find_package(Magnum REQUIRED
   GlfwApplication)
 
 
-#add_subdirectory(testing)
+add_subdirectory(testing)
 
 
 file(COPY README.md DESTINATION ${CMAKE_BINARY_DIR})
