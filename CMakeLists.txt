@@ -7,11 +7,14 @@
 #  message("NOT using vcpkg")
 #endif()
 
-project(Radium)
 
 # need 3.12 for FindPython support
 cmake_minimum_required (VERSION 3.12)
 
+project(Radium)
+
+# CMake warnings about list stuff
+cmake_policy(SET CMP0007 NEW)
 
 # sets the target types
 if(UNIX)
@@ -37,6 +40,11 @@ endif()
 
 # using magnum, so whole project needs C++11
 set(CMAKE_CXX_STANDARD 17)
+
+if(WIN32)
+  # windows needs this to compile the MASSIVE pybind11 stuff. 
+  add_compile_options(-bigobj)
+endif()
 
 # we're compiling a bunch of shared libs, all should be pos independent.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
