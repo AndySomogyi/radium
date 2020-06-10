@@ -73,7 +73,10 @@ message("CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}")
 if(RA_WINDOWS)
   find_package(unofficial-cairo CONFIG REQUIRED)
   # add_library(<name> ALIAS <target>)
-  add_library(Cairo::Cairo ALIAS unofficial::cairo)
+
+  # have to set this to create an alias, don't know why...
+  set_property(TARGET unofficial::cairo::cairo PROPERTY	IMPORTED_GLOBAL TRUE)
+  add_library(Cairo::Cairo ALIAS unofficial::cairo::cairo)
 else()
   find_package(Cairo REQUIRED)
 endif()
