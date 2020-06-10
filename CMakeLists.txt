@@ -186,8 +186,6 @@ endforeach()
 add_subdirectory(extern)
 
 
-#add_subdirectory(include)
-#add_subdirectory(src)
 
 
 # CMake policies: enable MACOSX_RPATH by default
@@ -204,6 +202,8 @@ find_package(Magnum REQUIRED
   GlfwApplication)
 
 
+add_subdirectory(include)
+add_subdirectory(src)
 add_subdirectory(testing)
 
 
