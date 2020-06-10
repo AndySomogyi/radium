@@ -12,26 +12,23 @@ message("VCPKG CMAKE_TOOLCHAIN_FILE = ${CMAKE_TOOLCHAIN_FILE}")
 
 project(Radium)
 
-# CMake warnings about list stuff
-cmake_policy(SET CMP0007 NEW)
-
-# sets the target types
+# essets the target types
 if(UNIX)
   # Both APPLE and UNIX are defined on OSX
   if(APPLE)
-    set(MX_APPLE 1)
+    set(RA_APPLE 1)
   else()
-    set(MX_LINUX 1)
+    set(RA_LINUX 1)
   endif()
-  set(MX_UNIX 1)
+  set(RA_UNIX 1)
 elseif(WIN32)
-  set(MX_WINDOWS 1)
+  set(RA_WINDOWS 1)
 endif()
 
 # directory where we build the mechanica python package
-set(MX_PYPKG_DIR ${CMAKE_BINARY_DIR}/radium)
+set(RA_PYPKG_DIR ${CMAKE_BINARY_DIR}/radium)
 
-if(MX_APPLE AND DEFINED CMAKE_ECLIPSE_VERSION)
+if(RA_APPLE AND DEFINED CMAKE_ECLIPSE_VERSION)
   # hack to get eclipse C++ indexer to pick up python headers
   message("setting eclipse include dirs")
   include_directories(/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m)
@@ -40,7 +37,7 @@ endif()
 # using magnum, so whole project needs C++11
 set(CMAKE_CXX_STANDARD 17)
 
-if(WIN32)
+if(RA_WINDOWS)
   # windows needs this to compile the MASSIVE pybind11 stuff. 
   add_compile_options(-bigobj)
 endif()
@@ -60,6 +57,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${PROJECT_SOURCE_DIR}/extern/magnum/modules
   ${PROJECT_SOURCE_DIR}/extern/magnum-plugins/modules)
 
+
 message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 message("CMAKE_OSX_DEPLOYMENT_TARGET: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
 message("MACOSX_DEPLOYMENT_TARGET: ${MACOSX_DEPLOYMENT_TARGET}")
@@ -72,7 +70,13 @@ message("CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}")
 
 #find_package(GLFW REQUIRED)
 
-find_package(unofficial-cairo CONFIG REQUIRED)
+if(RA_WINDOWS)
+  find_package(unofficial-cairo CONFIG REQUIRED)
+  # add_library(<name> ALIAS <target>)
+  add_library(Cairo::Cairo ALIAS unofficial::cairo)
+else()
+  find_package(Cairo REQUIRED)
+endif()
 
 message("cairo: ${unofficial-cairo}")
 #message("ucairo: ${unofficial::cairo}")

@@ -6,10 +6,13 @@ add_executable(ra-test
 #    find_package(unofficial-cairo CONFIG REQUIRED)
 target_link_libraries(ra-test
   PRIVATE
-  unofficial::cairo::cairo
-  unofficial::cairo::cairo-gobject
+  Cairo::Cairo
   JPEG::JPEG
   )
+
+if(RA_WINDOWS)
+  target_link_libraries(ra-test PRIVATE unofficial::cairo::cairo-gobject)
+endif()
 
 
 # Get the include directories for the target.
