@@ -85,7 +85,6 @@ target_include_directories(radium_obj PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  ${Python_INCLUDE_DIRS}
 )
 
 
@@ -142,23 +141,17 @@ target_include_directories(radium_shared PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  ${Python_INCLUDE_DIRS}
-  #${NUMPY_INCLUDE_DIR}
-  #$<INSTALL_INTERFACE:include/mylib>  # <prefix>/include/mylib
 )
 
 target_include_directories(radium_shared PRIVATE ${PYBIND11_INCLUDE_DIR})
 
 
 target_link_libraries(radium_shared
-  Python::Python
-  Python::NumPy
   glfw
   Magnum::Application
   Magnum::Magnum
   Magnum::Shaders
   MagnumGlfwApplication
-  Magnum_PyBind
   Magnum::SceneGraph
   Magnum::Primitives
   Magnum::MeshTools
@@ -184,7 +177,7 @@ endif()
 
 
 # shared and static libraries built from the same object files
-add_library(radium_static SHARED
+add_library(radium_static STATIC
   $<TARGET_OBJECTS:radium_obj>
   radium.cpp
   )
@@ -194,29 +187,27 @@ set_target_properties(radium_static PROPERTIES
   VISIBILITY_INLINES_HIDDEN 1
   )
 
-set_target_properties(radium_static PROPERTIES OUTPUT_NAME radium)
+if(RA_WINDOWS)
+  set_target_properties(radium_static PROPERTIES OUTPUT_NAME radium_static)
+else()
+  set_target_properties(radium_static PROPERTIES OUTPUT_NAME radium)
+endif()
 
 target_include_directories(radium_static PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  ${Python_INCLUDE_DIRS}
-  #${NUMPY_INCLUDE_DIR}
-  #$<INSTALL_INTERFACE:include/mylib>  # <prefix>/include/mylib
 )
 
 target_include_directories(radium_static PRIVATE ${PYBIND11_INCLUDE_DIR})
 
 
 target_link_libraries(radium_static
-  Python::Python
-  Python::NumPy
   glfw
   Magnum::Application
   Magnum::Magnum
   Magnum::Shaders
   MagnumGlfwApplication
-  Magnum_PyBind
   Magnum::SceneGraph
   Magnum::Primitives
   Magnum::MeshTools
@@ -363,4 +354,3 @@ add_library(radium::radium ALIAS radium_shared)
 add_library(radium::Static ALIAS radium_static)
 add_library(radium::Shared ALIAS radium_shared)
 
-#add_library(radium::PythonLib ALIAS radium_py)

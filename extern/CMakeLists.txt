@@ -5,9 +5,6 @@
 add_subdirectory(glfw)
 
 
-set(PYBIND11_CPP_STANDARD -std=c++14)
-add_subdirectory(pybind11)
-
 # glfw does not set it's target include directories, but it turns out we
 # can set them after the glfw subproject is processed.
 # This approach enables us to simply target_link_libraries(MyProgram glfw), and
@@ -89,53 +86,15 @@ elseif(UNIX AND NOT APPLE)
   set(WITH_WINDOWLESSGLXAPPLICATION ON CACHE BOOL
     "Build WindowlessGlxApplication library" FORCE)
 
+elseif(WIN32)
+  # for Windows
+  message("building on Windows")
+    
+  set(WITH_WINDOWLESSWGLAPPLICATION ON CACHE BOOL
+    "Build WindowlessWglApplication library" FORCE)
+ 
 endif()
 
 set(WITH_TGAIMAGECONVERTER ON CACHE BOOL "Build TGA Image Converter" FORCE)
 
 add_subdirectory(magnum)
-
-
-set(MAGNUM_PYTHON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/magnum-bindings/src/python/magnum)
-
-set(magnum_SRCS
-    #magnum.cpp
-    ${MAGNUM_PYTHON_SOURCE_DIR}/math.cpp
-    ${MAGNUM_PYTHON_SOURCE_DIR}/math.matrixfloat.cpp
-    ${MAGNUM_PYTHON_SOURCE_DIR}/math.matrixdouble.cpp
-    ${MAGNUM_PYTHON_SOURCE_DIR}/math.range.cpp
-    ${MAGNUM_PYTHON_SOURCE_DIR}/math.vectorfloat.cpp
-    ${MAGNUM_PYTHON_SOURCE_DIR}/math.vectorintegral.cpp)
-
-
-# this is the "object library" target: compiles the sources only once
-# need at least one src file in a project for xcode to build it, xcode
-# won't work if any product *only* has an object src
-add_library(Magnum_PyBind
-  OBJECT
-  ${magnum_SRCS}
-  )
-
-set_target_properties(Magnum_PyBind PROPERTIES
-  CXX_VISIBILITY_PRESET hidden
-  VISIBILITY_INLINES_HIDDEN 1
-  )
-
-set_target_properties(Magnum_PyBind PROPERTIES POSITION_INDEPENDENT_CODE ON)
-
-target_include_directories(Magnum_PyBind PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/magnum-bindings/src/python/
-  ${CMAKE_CURRENT_SOURCE_DIR}/magnum-bindings/src/
-)
-
-target_link_libraries(Magnum_PyBind PUBLIC
-  Magnum::Magnum
-  )
-
-target_link_libraries(Magnum_PyBind PRIVATE Magnum::Magnum ${magnum_LIBS})
-
-
-target_include_directories(Magnum_PyBind PUBLIC
-  ${Python_INCLUDE_DIRS}
-  ${PYBIND11_INCLUDE_DIR}
-  )

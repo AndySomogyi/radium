@@ -28,12 +28,6 @@ endif()
 # directory where we build the mechanica python package
 set(RA_PYPKG_DIR ${CMAKE_BINARY_DIR}/radium)
 
-if(RA_APPLE AND DEFINED CMAKE_ECLIPSE_VERSION)
-  # hack to get eclipse C++ indexer to pick up python headers
-  message("setting eclipse include dirs")
-  include_directories(/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m)
-endif()
-
 # using magnum, so whole project needs C++11
 set(CMAKE_CXX_STANDARD 17)
 
@@ -84,40 +78,6 @@ endif()
 message("cairo: ${unofficial-cairo}")
 #message("ucairo: ${unofficial::cairo}")
 #message("ucairoc: ${unofficial::cairo::cairo}")
-
-find_package(Python 3.5 COMPONENTS Development NumPy)
-
-message("Python_FOUND: ${Python_FOUND}")
-message("Python_Interpeter_FOUND: ${Python_Interpeter_FOUND}")
-message("Python_VERSION: ${Python_VERSION}")
-message("Python_Development_FOUND: ${Python_Development_FOUND}")
-
-message("Python_Development_FOUND: ${Python_Development_FOUND}")
-message("Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
-message("Python_LIBRARIES: ${Python_LIBRARIES}")
-message("Python_LIBRARY_DIRS: ${Python_LIBRARY_DIRS}")
-message("Python_RUNTIME_LIBRARY_DIRS: ${Python_RUNTIME_LIBRARY_DIRS}")
-message("Python_EXECUTABLE: ${Python_EXECUTABLE}")
-
-message("Python_NumPy_FOUND: ${Python_NumPy_FOUND}")
-message("Python_NumPy_INCLUDE_DIRS: ${Python_NumPy_INCLUDE_DIRS}")
-message("Python_NumPy_VERSION: ${Python_NumPy_VERSION}")
-
-
-if(Python_Development_FOUND)
-  get_target_property(TMP Python::Python IMPORTED_LOCATION_DEBUG)
-  message("Python IMPORTED_LOCATION_DEBUG: ${TMP}")
-
-  get_target_property(TMP Python::Python IMPORTED_LOCATION_RELEASE)
-  message("Python IMPORTED_LOCATION_RELEASE: ${TMP}")
-endif()
-
-if(MX_APPLE AND DEFINED CMAKE_ECLIPSE_VERSION)
-  # hack to get eclipse C++ indexer to pick up python headers
-  message("setting eclipse include dirs: ${Python_INCLUDE_DIRS}")
-  include_directories(${Python_INCLUDE_DIRS})
-endif()
-
 
 # needed for jpeg image writer
 find_package(JPEG REQUIRED)
