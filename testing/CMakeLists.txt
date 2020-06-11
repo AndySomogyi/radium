@@ -8,6 +8,7 @@ target_link_libraries(ra-test
   PRIVATE
   JPEG::JPEG
   Cairo::Cairo
+  Radium::Shared
   )
 
 if(RA_WINDOWS)

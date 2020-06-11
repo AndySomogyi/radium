@@ -285,6 +285,8 @@ struct RaApplicationConfig
 
 };
 
+CAPI_FUNC(HRESULT)ra_main(int argc, const char** argv);
+
 
 
 

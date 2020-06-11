@@ -9,11 +9,11 @@ add_compile_options(-DMX_STRICT)
 
 # Make sure the compiler can find include files for our Hello library
 # when other libraries or executables link to Hello
-include_directories(PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
 
-message(STATUS "numpy: ${NUMPY_INCLUDE_DIR}")
+
+corrade_add_resource(TexturedTriangle_RESOURCES resources.conf)
 
 
 set(SRC
@@ -22,6 +22,10 @@ set(SRC
   ra_renderer.cpp
   ra_window.cpp
   radium.cpp
+  RaGlfwApplication.cpp
+  TexturedTriangleShader.cpp
+  TexturedTriangleShader.h
+  ${TexturedTriangle_RESOURCES}
   )
 
 
@@ -32,6 +36,7 @@ set(HEADERS
   ra_renderer.hpp
   ra_window.hpp
   radium.hpp
+  RaGlfwApplication.h
   )
 
 
@@ -93,9 +98,12 @@ target_link_libraries(radium_obj
   Magnum::Application
   Magnum::Magnum
   Magnum::Shaders
-  ${OPENGL_LIBRARIES}
+  Magnum::GL
+  Magnum::Magnum
+  Magnum::Trade
+  Magnum::TgaImporter
   )
- 
+
 target_link_libraries(radium_obj
   Cairo::Cairo
   JPEG::JPEG
@@ -156,8 +164,11 @@ target_link_libraries(radium_shared
   Magnum::Primitives
   Magnum::MeshTools
   ${RA_JPEG_LIBRARIES}
+  Magnum::GL
+  Magnum::Trade
+  Magnum::TgaImporter
   )
- 
+
 target_link_libraries(radium_shared
   Cairo::Cairo
   JPEG::JPEG
@@ -199,8 +210,6 @@ target_include_directories(radium_static PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 
-target_include_directories(radium_static PRIVATE ${PYBIND11_INCLUDE_DIR})
-
 
 target_link_libraries(radium_static
   glfw
@@ -212,8 +221,11 @@ target_link_libraries(radium_static
   Magnum::Primitives
   Magnum::MeshTools
   ${RA_JPEG_LIBRARIES}
+  Magnum::GL
+  Magnum::Trade
+  Magnum::TgaImporter
   )
- 
+
 target_link_libraries(radium_static
   Cairo::Cairo
   JPEG::JPEG
@@ -349,8 +361,7 @@ endif()
 #file(COPY setup.py DESTINATION ${CMAKE_BINARY_DIR})
 
 
-add_library(radium ALIAS radium_shared)
-add_library(radium::radium ALIAS radium_shared)
-add_library(radium::Static ALIAS radium_static)
-add_library(radium::Shared ALIAS radium_shared)
-
+add_library(Radium ALIAS radium_shared)
+add_library(Radium::Radium ALIAS radium_shared)
+add_library(Radium::Static ALIAS radium_static)
+add_library(Radium::Shared ALIAS radium_shared)

@@ -96,5 +96,7 @@ elseif(WIN32)
 endif()
 
 set(WITH_TGAIMAGECONVERTER ON CACHE BOOL "Build TGA Image Converter" FORCE)
+set(WITH_TGAIMPORTER       ON CACHE BOOL "Build TGA Image Importer" FORCE)
+
 
 add_subdirectory(magnum)
