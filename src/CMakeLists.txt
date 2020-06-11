@@ -100,8 +100,6 @@ target_link_libraries(radium_obj
   Magnum::Shaders
   Magnum::GL
   Magnum::Magnum
-  Magnum::Trade
-  Magnum::TgaImporter
   )
 
 target_link_libraries(radium_obj
@@ -165,7 +163,6 @@ target_link_libraries(radium_shared
   Magnum::MeshTools
   ${RA_JPEG_LIBRARIES}
   Magnum::GL
-  Magnum::Trade
   Magnum::TgaImporter
   )
 
@@ -222,7 +219,6 @@ target_link_libraries(radium_static
   Magnum::MeshTools
   ${RA_JPEG_LIBRARIES}
   Magnum::GL
-  Magnum::Trade
   Magnum::TgaImporter
   )
 
