@@ -31,13 +31,13 @@ CAPI_FUNC(RaApplication*) RaApplication_Create(int argc, const char** _argv)
 
 CAPI_FUNC(HRESULT) RaApplication_Run(RaApplication* _app)
 {
-    App *app = reinterpret_cast<App*>(_app);
+    App* app = (App*)_app;
     app->exec();
     return S_OK;
 }
 
 CAPI_FUNC(HRESULT) RaApplication_SetImage(RaApplication* _app, uint32_t width, uint32_t height, uint32_t format, const void* data)
 {
-    App *app = reinterpret_cast<App*>(_app);
+    App* app = (App*)_app;
     return app->setImage(width, height, format, data);
 }
