@@ -10,5 +10,9 @@
 
 #include <ra_application.h>
 
+struct RaApplication {
+
+};
+
 
 #endif /* INCLUDE_RA_APPLICATION_H_ */

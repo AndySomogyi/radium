@@ -13,6 +13,9 @@
 #include <Magnum/Trade/ImageData.h>
 #include <Magnum/Platform/GlfwApplication.h>
 #include <MagnumPlugins/TgaImporter/TgaImporter.h>
+#include "Magnum/PixelFormat.h"
+#include <Magnum/GL/PixelFormat.h>
+
 
 #include "TexturedTriangleShader.h"
 
@@ -29,14 +32,16 @@ RaGlfwApplication::RaGlfwApplication(const Arguments& arguments):
         Vector2 textureCoordinates;
     };
     const TriangleVertex data[]{
-        {{-0.5f, -0.5f}, {0.0f, 0.0f}}, /* Left position and texture coordinate */
-        {{ 0.5f, -0.5f}, {1.0f, 0.0f}}, /* Right position and texture coordinate */
-        {{ 0.0f,  0.5f}, {0.5f, 1.0f}}  /* Top position and texture coordinate */
+        {{-1.f, -1.f}, {0.0f, 1.0f}}, /* Left position and texture coordinate */
+        {{ 1.f, -1.f}, {1.0f, 1.0f}}, /* Right position and texture coordinate */
+        {{-1.f,  1.f}, {0.0f, 0.0f}},  /* Top position and texture coordinate */
+        {{ 1.f,  1.f}, {1.0f, 0.0f}}  /* Top position and texture coordinate */
     };
 
     GL::Buffer buffer;
     buffer.setData(data);
-    _mesh.setCount(3)
+    _mesh.setCount(4)
+        .setPrimitive(Magnum::GL::MeshPrimitive::TriangleStrip)
         .addVertexBuffer(std::move(buffer), 0,
             TexturedTriangleShader::Position{},
             TexturedTriangleShader::TextureCoordinates{});
@@ -45,17 +50,27 @@ RaGlfwApplication::RaGlfwApplication(const Arguments& arguments):
 
     /* Load the texture */
     const Utility::Resource rs{"textured-triangle-data"};
-    if(!importer.openData(rs.getRaw("stone.tga")))
+    if(!importer.openData(rs.getRaw("cobra.tga")))
         std::exit(2);
 
     /* Set texture data and parameters */
     Containers::Optional<Trade::ImageData2D> image = importer.image2D(0);
     CORRADE_INTERNAL_ASSERT(image);
+
+    uint32_t i = GL_BGRA;
+
+
+
+
+    GL::TextureFormat tf = (GL::TextureFormat)i;
+
     _texture.setWrapping(GL::SamplerWrapping::ClampToEdge)
         .setMagnificationFilter(GL::SamplerFilter::Linear)
         .setMinificationFilter(GL::SamplerFilter::Linear)
         .setStorage(1, GL::textureFormat(image->format()), image->size())
         .setSubImage(0, {}, *image);
+
+
 }
 
 void RaGlfwApplication::drawEvent() {
@@ -71,6 +86,21 @@ void RaGlfwApplication::drawEvent() {
     swapBuffers();
 }
 
+HRESULT RaGlfwApplication::RaGlfwApplication::setImage(uint32_t width,
+        uint32_t height, uint32_t format, const void *data)
+{
+
+    Containers::ArrayView av{data, width * height * 4};
+
+    ImageView2D iv{GL::PixelFormat::BGRA, GL::PixelType::UnsignedByte, {(int)width, (int)height}, av};
+
+    _texture.setSubImage(0, {}, iv);
+
+    //ImageView2D iv = ImageView2D{PixelFormat::RGBA8Unorm, {width, height}, (const unsigned char*)data};
+
+    return S_OK;
+}
+
 }}
 
-MAGNUM_APPLICATION_MAIN(Magnum::Examples::RaGlfwApplication)
+

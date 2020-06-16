@@ -285,6 +285,15 @@ struct RaApplicationConfig
 
 };
 
+CAPI_STRUCT(RaApplication);
+
+CAPI_FUNC(RaApplication*) RaApplication_Create(int argc, const char **argv);
+
+CAPI_FUNC(HRESULT) RaApplication_Run(RaApplication *app);
+
+CAPI_FUNC(HRESULT) RaApplication_SetImage(RaApplication* _app, uint32_t width, uint32_t height,
+        uint32_t format, const void *data);
+
 CAPI_FUNC(HRESULT)ra_main(int argc, const char** argv);
 
 

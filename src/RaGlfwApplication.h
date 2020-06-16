@@ -9,6 +9,8 @@
 #ifndef SRC_RaGlfwApplication_H_
 #define SRC_RaGlfwApplication_H_
 
+#include <ra_application.hpp>
+
 #include <Corrade/Containers/ArrayView.h>
 #include <Corrade/Containers/Optional.h>
 #include <Corrade/PluginManager/Manager.h>
@@ -27,9 +29,11 @@
 
 namespace Magnum { namespace Examples {
 
-class RaGlfwApplication : public Platform::GlfwApplication {
+class RaGlfwApplication : public RaApplication, public Platform::GlfwApplication {
     public:
         explicit RaGlfwApplication(const Arguments& arguments);
+
+       HRESULT setImage(uint32_t width, uint32_t height, uint32_t format, const void* data);
 
     private:
         void drawEvent() override;
