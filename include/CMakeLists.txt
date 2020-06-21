@@ -8,7 +8,6 @@ endfunction(prepend)
 
 
 set (_PUBLIC_HEADERS
-  c_port.h
   radium.h
   ra_application.h
   ra_renderer.h

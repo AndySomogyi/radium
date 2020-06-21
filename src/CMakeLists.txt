@@ -94,6 +94,7 @@ target_include_directories(radium_obj PUBLIC
 
 
 target_link_libraries(radium_obj
+  Carbon::Static
   glfw
   Magnum::Application
   Magnum::Magnum
@@ -153,6 +154,7 @@ target_include_directories(radium_shared PRIVATE ${PYBIND11_INCLUDE_DIR})
 
 
 target_link_libraries(radium_shared
+  Carbon::Static
   glfw
   Magnum::Application
   Magnum::Magnum
@@ -209,6 +211,7 @@ target_include_directories(radium_static PUBLIC
 
 
 target_link_libraries(radium_static
+  Carbon::Static
   glfw
   Magnum::Application
   Magnum::Magnum

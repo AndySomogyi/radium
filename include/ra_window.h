@@ -8,8 +8,8 @@
 #ifndef INCLUDE_RA_WINDOW_H_
 #define INCLUDE_RA_WINDOW_H_
 
-class ra_window
-{
-};
+#include <c_port.h>
+
+CAPI_STRUCT(RaWindow);
 
 #endif /* INCLUDE_RA_WINDOW_H_ */

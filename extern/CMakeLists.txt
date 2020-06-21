@@ -1,5 +1,5 @@
 # build core carbon lib
-#add_subdirectory(carbon)
+add_subdirectory(carbon)
 
 # build glfw here, set up variables so magnum does not try to find it
 add_subdirectory(glfw)

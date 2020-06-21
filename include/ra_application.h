@@ -9,6 +9,7 @@
 #define INCLUDE_RA_APPLICATION_H_
 
 #include <c_port.h>
+#include <ra_window.h>
 
 
 enum   RaDpiScalingPolicy  {
@@ -293,6 +294,12 @@ CAPI_FUNC(HRESULT) RaApplication_Run(RaApplication *app);
 
 CAPI_FUNC(HRESULT) RaApplication_SetImage(RaApplication* _app, uint32_t width, uint32_t height,
         uint32_t format, const void *data);
+
+
+/**
+ * Get the main window
+ */
+CAPI_FUNC(RaWindow*) RaApplication_Window(RaApplication *app);
 
 CAPI_FUNC(HRESULT)ra_main(int argc, const char** argv);
 
