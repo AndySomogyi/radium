@@ -5,8 +5,10 @@
 #include <radium.h>
 #include <cmath>
 
-void cairo_test(RaApplication *app);
+#define _USE_MATH_DEFINES // for C
+#include <math.h>
 
+void cairo_test(RaApplication *app);
 
 int main(int argc, const char** argv) {
   const char* cairo_ver = cairo_version_string ();
@@ -23,8 +25,7 @@ int main(int argc, const char** argv) {
 
 
 void cairo_test(RaApplication *app) {
-    cairo_public cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 900, 600);
-
+    cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 900, 600);
 
     cairo_t *cr = cairo_create(surface);
     
