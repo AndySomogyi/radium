@@ -1,9 +1,8 @@
-# build core carbon lib
-add_subdirectory(carbon)
-
 # build glfw here, set up variables so magnum does not try to find it
 add_subdirectory(glfw)
 
+# build core carbon lib
+add_subdirectory(carbon)
 
 # glfw does not set it's target include directories, but it turns out we
 # can set them after the glfw subproject is processed.
@@ -26,7 +25,6 @@ add_library(GLFW::GLFW ALIAS glfw)
 
 set(GLFW_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/glfw/include/GLFW)
 set(GLFW_FOUND TRUE)
-
 
 message("GLFW_VERSION_MAJOR: ${GLFW_VERSION_MAJOR}")
 message("GLFW_VERSION_MINOR: ${GLFW_VERSION_MINOR}")

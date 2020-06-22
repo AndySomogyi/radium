@@ -155,7 +155,6 @@ target_include_directories(radium_shared PUBLIC
 target_include_directories(radium_shared PRIVATE ${PYBIND11_INCLUDE_DIR})
 
 target_link_libraries(radium_shared PUBLIC
-  glfw
   Magnum::Application
   Magnum::Magnum
   Magnum::Shaders
@@ -167,6 +166,7 @@ target_link_libraries(radium_shared PUBLIC
   Magnum::GL
   Magnum::TgaImporter
   LibSBML::LibSBML
+  glfw	
   )
 
 target_link_libraries(radium_shared PUBLIC
@@ -213,7 +213,6 @@ target_include_directories(radium_static PUBLIC
 
 target_link_libraries(radium_static PUBLIC
   Carbon::Static
-  glfw
   Magnum::Application
   Magnum::Magnum
   Magnum::Shaders
@@ -224,6 +223,7 @@ target_link_libraries(radium_static PUBLIC
   ${RA_JPEG_LIBRARIES}
   Magnum::GL
   Magnum::TgaImporter
+  glfw
   )
 
 target_link_libraries(radium_static PUBLIC
