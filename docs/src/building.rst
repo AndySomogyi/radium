@@ -37,11 +37,18 @@ MacOS.
 
 Install vcpkg by using Git to clone the vcpkg repo from GitHub:
 https://github.com/Microsoft/vcpkg. You can download to any folder location,
-preferably without any spaces.
+preferably without any spaces::
 
-Run the bootstrapper in the root folder:
+  >>> git clone https://github.com/microsoft/vcpkg.git
 
-* **bootstrap-vcpkg.bat** (Windows)
+Run the bootstrapper in the root folder where you installed vckpg::
+
+  >>> bootstrap-vcpkg.bat
+
+Tell vcpkg to integreate with your other tools, the previous bat file might do
+this, but I usually run::
+
+  >>> vcpkg integrate install 
 
 (4) Install 3rd party libraries from vcpkg
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
