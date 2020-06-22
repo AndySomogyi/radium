@@ -28,11 +28,11 @@ endif()
 # directory where we build the mechanica python package
 set(RA_PYPKG_DIR ${CMAKE_BINARY_DIR}/radium)
 
-# using magnum, so whole project needs C++11
+# using magnum, so whole project needs C++14
 set(CMAKE_CXX_STANDARD 17)
 
 if(RA_WINDOWS)
-  # windows needs this to compile the MASSIVE pybind11 stuff. 
+  # windows needs this to compile the MASSIVE pybind11 stuff.
   add_compile_options(-bigobj)
 endif()
 
@@ -110,6 +110,9 @@ find_package(OpenGL REQUIRED)
 #find_package(LLVM)
 
 #find_package(OpenMM)
+
+find_package (Python 3.5 REQUIRED COMPONENTS Development)
+
 
 add_definitions(-DCX3D_SUPPORT_OPENGL)
 

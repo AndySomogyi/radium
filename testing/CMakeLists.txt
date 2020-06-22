@@ -9,6 +9,7 @@ target_link_libraries(ra-test
   JPEG::JPEG
   Cairo::Cairo
   Radium::Shared
+  Python::Python
   )
 
 if(RA_WINDOWS)

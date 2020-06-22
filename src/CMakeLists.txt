@@ -134,6 +134,7 @@ set_property(TARGET radium_obj PROPERTY POSITION_INDEPENDENT_CODE 1)
 # shared and static libraries built from the same object files
 add_library(radium_shared SHARED
   $<TARGET_OBJECTS:radium_obj>
+  $<TARGET_OBJECTS:carbon_obj>
   radium.cpp
   )
 
@@ -148,13 +149,12 @@ target_include_directories(radium_shared PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<TARGET_PROPERTY:Carbon::Carbon,INCLUDE_DIRECTORIES>
 )
 
 target_include_directories(radium_shared PRIVATE ${PYBIND11_INCLUDE_DIR})
 
-
-target_link_libraries(radium_shared
-  Carbon::Static
+target_link_libraries(radium_shared PUBLIC
   glfw
   Magnum::Application
   Magnum::Magnum
@@ -166,23 +166,24 @@ target_link_libraries(radium_shared
   ${RA_JPEG_LIBRARIES}
   Magnum::GL
   Magnum::TgaImporter
+  LibSBML::LibSBML
   )
 
-target_link_libraries(radium_shared
+target_link_libraries(radium_shared PUBLIC
   Cairo::Cairo
   JPEG::JPEG
   )
 
 if(RA_WINDOWS)
-  target_link_libraries(radium_shared unofficial::cairo::cairo-gobject)
+  target_link_libraries(radium_shared PUBLIC unofficial::cairo::cairo-gobject)
 endif()
 
 if(RA_APPLE)
-  target_link_libraries(radium_shared MagnumWindowlessCglApplication)
+  target_link_libraries(radium_shared PUBLIC MagnumWindowlessCglApplication)
 elseif(RA_LINUX)
-  target_link_libraries(radium_shared MagnumWindowlessEglApplication)
+  target_link_libraries(radium_shared PUBLIC MagnumWindowlessEglApplication)
 elseif(RA_WINDOWS)
-  target_link_libraries(radium_shared MagnumWindowlessWglApplication)
+  target_link_libraries(radium_shared PUBLIC MagnumWindowlessWglApplication)
 endif()
 
 
@@ -210,7 +211,7 @@ target_include_directories(radium_static PUBLIC
 )
 
 
-target_link_libraries(radium_static
+target_link_libraries(radium_static PUBLIC
   Carbon::Static
   glfw
   Magnum::Application
@@ -225,21 +226,21 @@ target_link_libraries(radium_static
   Magnum::TgaImporter
   )
 
-target_link_libraries(radium_static
+target_link_libraries(radium_static PUBLIC
   Cairo::Cairo
   JPEG::JPEG
   )
 
 if(RA_WINDOWS)
-  target_link_libraries(radium_static unofficial::cairo::cairo-gobject)
+  target_link_libraries(radium_static PUBLIC unofficial::cairo::cairo-gobject)
 endif()
 
 if(RA_APPLE)
-  target_link_libraries(radium_static MagnumWindowlessCglApplication)
+  target_link_libraries(radium_static PRIVATE MagnumWindowlessCglApplication)
 elseif(RA_LINUX)
-  target_link_libraries(radium_static MagnumWindowlessEglApplication)
+  target_link_libraries(radium_static PRIVATE MagnumWindowlessEglApplication)
 elseif(RA_WINDOWS)
-  target_link_libraries(radium_static MagnumWindowlessWglApplication)
+  target_link_libraries(radium_static PRIVATE MagnumWindowlessWglApplication)
 endif()
 
 
@@ -359,6 +360,37 @@ endif()
 #
 #file(COPY setup.py DESTINATION ${CMAKE_BINARY_DIR})
 
+
+
+if(WIN32 OR CYGWIN)
+  # Link against the Python shared library on Windows
+  #target_link_libraries(radium_py PRIVATE Python::Python)
+  target_link_libraries(radium_static PRIVATE Python::Python)
+  target_link_libraries(radium_shared PRIVATE Python::Python)
+
+elseif(APPLE)
+  # It's quite common to have multiple copies of the same Python version
+  # installed on one's system. E.g.: one copy from the OS and another copy
+  # that's statically linked into an application like Blender or Maya.
+  # If we link our plugin library against the OS Python here and import it
+  # into Blender or Maya later on, this will cause segfaults when multiple
+  # conflicting Python instances are active at the same time (even when they
+  # are of the same version).
+
+  # Windows is not affected by this issue since it handles DLL imports
+  # differently. The solution for Linux and Mac OS is simple: we just don't
+  # link against the Python library. The resulting shared library will have
+  # missing symbols, but that's perfectly fine -- they will be resolved at
+  # import time.
+
+  #target_link_libraries(radium_py PRIVATE "-undefined dynamic_lookup")
+  target_link_libraries(radium_shared PRIVATE "-undefined dynamic_lookup")
+
+  if(ARG_SHARED)
+    # Suppress CMake >= 3.0 warning for shared libraries
+    set_target_properties(carbon_py PROPERTIES MACOSX_RPATH ON)
+  endif()
+endif()
 
 add_library(Radium ALIAS radium_shared)
 add_library(Radium::Radium ALIAS radium_shared)
