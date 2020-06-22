@@ -295,11 +295,64 @@ CAPI_FUNC(HRESULT) RaApplication_Run(RaApplication *app);
 CAPI_FUNC(HRESULT) RaApplication_SetImage(RaApplication* _app, uint32_t width, uint32_t height,
         uint32_t format, const void *data);
 
+/**
+ * This function processes only those events that are already in the event
+ * queue and then returns immediately. Processing events will cause the window
+ * and input callbacks associated with those events to be called.
+ *
+ * On some platforms, a window move, resize or menu operation will cause
+ * event processing to block. This is due to how event processing is designed
+ * on those platforms. You can use the window refresh callback to redraw the
+ * contents of your window when necessary during such operations.
+ */
+CAPI_FUNC(HRESULT) RaApplication_PollEvents (RaApplication *app);
 
 /**
- * Get the main window
+ *   This function puts the calling thread to sleep until at least one
+ *   event is available in the event queue. Once one or more events are
+ *   available, it behaves exactly like glfwPollEvents, i.e. the events
+ *   in the queue are processed and the function then returns immediately.
+ *   Processing events will cause the window and input callbacks associated
+ *   with those events to be called.
+ *
+ *   Since not all events are associated with callbacks, this function may return
+ *   without a callback having been called even if you are monitoring all callbacks.
+ *
+ *  On some platforms, a window move, resize or menu operation will cause event
+ *  processing to block. This is due to how event processing is designed on
+ *  those platforms. You can use the window refresh callback to redraw the
+ *  contents of your window when necessary during such operations.
  */
-CAPI_FUNC(RaWindow*) RaApplication_Window(RaApplication *app);
+CAPI_FUNC(HRESULT) RaApplication_WaitEvents (RaApplication *app);
+
+/**
+ * This function puts the calling thread to sleep until at least
+ * one event is available in the event queue, or until the specified
+ * timeout is reached. If one or more events are available, it behaves
+ * exactly like pollEvents, i.e. the events in the queue are
+ * processed and the function then returns immediately. Processing
+ * events will cause the window and input callbacks associated with those
+ * events to be called.
+ *
+ * The timeout value must be a positive finite number.
+ * Since not all events are associated with callbacks, this function may
+ * return without a callback having been called even if you are monitoring
+ * all callbacks.
+ *
+ * On some platforms, a window move, resize or menu operation will cause
+ * event processing to block. This is due to how event processing is designed
+ * on those platforms. You can use the window refresh callback to redraw the
+ * contents of your window when necessary during such operations.
+ */
+
+CAPI_FUNC(HRESULT) RaApplication_WaitEventsTimeout(RaApplication *app, double  timeout);
+
+
+/**
+ * grabs the window form the app, currently only the 0'th window is supported
+ */
+CAPI_FUNC(RaWindow*) RaApplication_GetWindow (RaApplication *app, int id);
+
 
 CAPI_FUNC(HRESULT)ra_main(int argc, const char** argv);
 

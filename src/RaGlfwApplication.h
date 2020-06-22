@@ -35,6 +35,11 @@ class RaGlfwApplication : public RaApplication, public Platform::GlfwApplication
 
        HRESULT setImage(uint32_t width, uint32_t height, uint32_t format, const void* data);
 
+       /**
+        * Pointer to wrapper window.
+        */
+       RaWindow *win;
+
     private:
         void drawEvent() override;
 

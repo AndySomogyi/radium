@@ -7,8 +7,23 @@
 
 #include "ra_application.hpp"
 #include "RaGlfwApplication.h"
+#include <ra_window.hpp>
+#include <carbon.h>
 
 using App = Magnum::Examples::RaGlfwApplication;
+
+#define MXGLFW_ERROR() { \
+        const char* glfwErrorDesc = NULL; \
+        glfwGetError(&glfwErrorDesc); \
+        throw std::domain_error(std::string("GLFW Error in ") + MX_FUNCTION + ": " +  glfwErrorDesc); \
+}
+
+#define MXGLFW_CHECK() { \
+        const char* glfwErrorDesc = NULL; \
+        int ret = glfwGetError(&glfwErrorDesc); \
+        return ret == 0 ? S_OK : c_error(ret, glfwErrorDesc); \
+}
+
 
 
 
@@ -40,4 +55,33 @@ CAPI_FUNC(HRESULT) RaApplication_SetImage(RaApplication* _app, uint32_t width, u
 {
     App* app = (App*)_app;
     return app->setImage(width, height, format, data);
+}
+
+CAPI_FUNC(HRESULT) RaApplication_PollEvents(RaApplication *app)
+{
+    glfwPollEvents();
+    MXGLFW_CHECK();
+}
+
+CAPI_FUNC(HRESULT) RaApplication_WaitEvents(RaApplication *app)
+{
+    glfwWaitEvents();
+    MXGLFW_CHECK();
+}
+
+CAPI_FUNC(HRESULT) RaApplication_WaitEventsTimeout(RaApplication *app,
+        double timeout)
+{
+    glfwWaitEventsTimeout(timeout);
+    MXGLFW_CHECK();
+}
+
+CAPI_FUNC(RaWindow*) RaApplication_GetWindow(RaApplication *_app, int id)
+{
+    App* app = (App*)_app;
+    if(!app->win) {
+        app->win = RaWindow::New(app->window());
+    }
+
+    return app->win;
 }

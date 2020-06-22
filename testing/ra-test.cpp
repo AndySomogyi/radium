@@ -29,9 +29,12 @@ int main(int argc, const char** argv) {
 
 
 void cairo_test(RaApplication *app) {
-    cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 900, 600);
 
-    cairo_t *cr = cairo_create(surface);
+    RaWindow *win = RaApplication_GetWindow(app, 0);
+
+    RaCanvas *canvas = RaCanvas_CreateForWindow(win);
+
+    cairo_t *cr = RaCanvas_Cairo(canvas);
 
     cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
 
@@ -68,18 +71,12 @@ void cairo_test(RaApplication *app) {
     cairo_rel_line_to (cr, 512, 0);
     cairo_stroke (cr);
 
-    // flush all the drawing commands
-    cairo_surface_flush(surface);
-
-    unsigned char *data = cairo_image_surface_get_data(surface);
-
-    RaApplication_SetImage(app, 900, 600,0, data);
+    RaCanvas_Flush(canvas);
 }
 
+
+
 void foo() {
-
     CCompartment_t *c = CCompartment_create();
-
-
 }
 

@@ -17,6 +17,9 @@
 #include <Magnum/GL/PixelFormat.h>
 
 
+#include "ra_window.hpp"
+#include "ra_canvas.hpp"
+
 #include "TexturedTriangleShader.h"
 
 namespace Magnum { namespace Examples {
@@ -24,7 +27,7 @@ namespace Magnum { namespace Examples {
 
 
 RaGlfwApplication::RaGlfwApplication(const Arguments& arguments):
-    Platform::GlfwApplication{arguments, Configuration{}
+    win{NULL}, Platform::GlfwApplication{arguments, Configuration{}
         .setTitle("Radium Test")}
 {
     struct TriangleVertex {
@@ -76,12 +79,18 @@ RaGlfwApplication::RaGlfwApplication(const Arguments& arguments):
 void RaGlfwApplication::drawEvent() {
     GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
 
+    /*
+
     using namespace Math::Literals;
 
     _shader
         .setColor(0xffb2b2_rgbf)
         .bindTexture(_texture)
         .draw(_mesh);
+        */
+    if(win && win->canvas) {
+        win->canvas->draw();
+    }
 
     swapBuffers();
 }
