@@ -65,7 +65,8 @@ Install LibJpeg::
 (4) Install CMake
 ^^^^^^^^^^^^^^^^^
 
-CMake is the tool we use to generate the project files, it is available at:
+CMake is the tool we use to generate the project files. Any CMake greater than
+3.15 should work, we test develop with 3.17, CMake it is available at:
 
 `<https://cmake.org/install/>`_
 
